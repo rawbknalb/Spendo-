@@ -1,46 +1,53 @@
-import type { Settings, Transaction } from '../types'
+import type { Expense, SplitterSettings } from '../types'
 
-const TX_KEY = 'spendo.transactions.v1'
-const SETTINGS_KEY = 'spendo.settings.v1'
-const SEED_KEY = 'spendo.seeded.v1'
+const EXPENSES_KEY = 'spendo.expenses.v1'
+const SPLITTER_KEY = 'spendo.splitter.v1'
+const SEED_KEY = 'spendo.seeded.v2'
 
-export const DEFAULT_SETTINGS: Settings = {
-  currency: 'USD',
-  monthlyBudget: 2000,
+export const DEFAULT_SETTINGS: SplitterSettings = {
+  currency: 'EUR',
+  personA: { name: 'Person A', income: 0 },
+  personB: { name: 'Person B', income: 0 },
 }
 
-export function loadTransactions(): Transaction[] {
+export function loadExpenses(): Expense[] {
   try {
-    const raw = localStorage.getItem(TX_KEY)
+    const raw = localStorage.getItem(EXPENSES_KEY)
     if (!raw) return []
     const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? (parsed as Transaction[]) : []
+    return Array.isArray(parsed) ? (parsed as Expense[]) : []
   } catch {
     return []
   }
 }
 
-export function saveTransactions(transactions: Transaction[]): void {
+export function saveExpenses(expenses: Expense[]): void {
   try {
-    localStorage.setItem(TX_KEY, JSON.stringify(transactions))
+    localStorage.setItem(EXPENSES_KEY, JSON.stringify(expenses))
   } catch {
     /* storage full or unavailable — fail quietly */
   }
 }
 
-export function loadSettings(): Settings {
+export function loadSettings(): SplitterSettings {
   try {
-    const raw = localStorage.getItem(SETTINGS_KEY)
+    const raw = localStorage.getItem(SPLITTER_KEY)
     if (!raw) return DEFAULT_SETTINGS
-    return { ...DEFAULT_SETTINGS, ...(JSON.parse(raw) as Partial<Settings>) }
+    const parsed = JSON.parse(raw) as Partial<SplitterSettings>
+    return {
+      ...DEFAULT_SETTINGS,
+      ...parsed,
+      personA: { ...DEFAULT_SETTINGS.personA, ...(parsed.personA ?? {}) },
+      personB: { ...DEFAULT_SETTINGS.personB, ...(parsed.personB ?? {}) },
+    }
   } catch {
     return DEFAULT_SETTINGS
   }
 }
 
-export function saveSettings(settings: Settings): void {
+export function saveSettings(settings: SplitterSettings): void {
   try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
+    localStorage.setItem(SPLITTER_KEY, JSON.stringify(settings))
   } catch {
     /* ignore */
   }
