@@ -8,8 +8,8 @@ interface BudgetRingProps {
 
 /** Apple-Watch-style progress ring showing spend against the monthly budget. */
 export function BudgetRing({ spent, budget, currency }: BudgetRingProps) {
-  const size = 116
-  const stroke = 12
+  const size = 104
+  const stroke = 11
   const radius = (size - stroke) / 2
   const circumference = 2 * Math.PI * radius
   const ratio = budget > 0 ? Math.min(spent / budget, 1) : 0
