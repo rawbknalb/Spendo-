@@ -18,7 +18,7 @@ export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) 
       <h2 className="text-lg font-semibold tracking-tight">Shared expenses</h2>
 
       {sorted.length === 0 ? (
-        <p className="mt-6 text-sm text-white/50">
+        <p className="mt-6 text-sm text-gray-400">
           No shared expenses yet. Tap + to add your first one.
         </p>
       ) : (
@@ -40,7 +40,7 @@ export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) 
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-medium">{expense.label}</div>
-                  <div className="truncate text-xs text-white/45">{cat.label}</div>
+                  <div className="truncate text-xs text-gray-400">{cat.label}</div>
                 </div>
                 <span className="tabular shrink-0 text-sm font-semibold">
                   {formatMoney(expense.amount, currency)}
@@ -49,7 +49,7 @@ export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) 
                   type="button"
                   aria-label="Delete expense"
                   onClick={() => onRemove(expense.id)}
-                  className="pressable grid h-8 w-8 shrink-0 place-items-center rounded-full text-white/0 transition-colors hover:bg-rose-500/20 hover:text-rose-300 group-hover:text-white/40"
+                  className="pressable grid h-8 w-8 shrink-0 place-items-center rounded-full text-transparent transition-colors hover:bg-rose-100 hover:text-rose-600 group-hover:text-gray-400"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

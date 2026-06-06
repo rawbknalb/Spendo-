@@ -50,7 +50,7 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
       <div className="space-y-6">
         {/* Currency */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-white/50">
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
             Currency
           </label>
           <div className="grid grid-cols-4 gap-2">
@@ -61,8 +61,8 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
                 onClick={() => setCurrency(code)}
                 className={`pressable rounded-2xl border px-2 py-2.5 text-sm font-semibold transition-colors ${
                   currency === code
-                    ? 'border-white/60 bg-white/15'
-                    : 'border-white/10 bg-white/5 text-white/70 hover:bg-white/10'
+                    ? 'border-black/30 bg-black/[0.08]'
+                    : 'border-black/[0.08] bg-black/[0.04] text-gray-500 hover:bg-black/[0.06]'
                 }`}
               >
                 {code}
@@ -74,7 +74,7 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
         {/* Person A */}
         <PersonSection
           label="Person A"
-          accentClass="text-violet-300"
+          accentClass="text-violet-600"
           name={nameA}
           income={incomeA}
           currency={currency}
@@ -85,7 +85,7 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
         {/* Person B */}
         <PersonSection
           label="Person B"
-          accentClass="text-cyan-300"
+          accentClass="text-cyan-700"
           name={nameB}
           income={incomeB}
           currency={currency}
@@ -96,7 +96,7 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
         <button
           type="button"
           onClick={save}
-          className="pressable w-full rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 py-3.5 text-base font-semibold shadow-lg shadow-violet-500/25"
+          className="pressable w-full rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 py-3.5 text-base font-semibold text-white shadow-lg shadow-violet-500/25"
         >
           Save
         </button>
@@ -128,18 +128,18 @@ function PersonSection({
     <div className="space-y-3">
       <p className={`text-sm font-semibold ${accentClass}`}>{label}</p>
       <div>
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-white/50">
+        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
           Name
         </label>
         <input
           type="text"
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
-          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/30 focus:border-white/25"
+          className="w-full rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 text-sm outline-none placeholder:text-gray-300 focus:border-black/[0.18]"
         />
       </div>
       <div>
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-white/50">
+        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
           Monthly income ({currency})
         </label>
         <input
@@ -147,7 +147,7 @@ function PersonSection({
           placeholder="0"
           value={income}
           onChange={(e) => onIncomeChange(e.target.value.replace(/[^0-9.]/g, ''))}
-          className="tabular w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-lg font-semibold outline-none focus:border-white/25"
+          className="tabular w-full rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 text-lg font-semibold outline-none focus:border-black/[0.18]"
         />
       </div>
     </div>

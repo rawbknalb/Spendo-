@@ -34,7 +34,7 @@ export default function App() {
               <h1 className="text-xl font-bold leading-none tracking-tight">
                 Spendo
               </h1>
-              <p className="mt-1 text-xs font-medium text-white/50">
+              <p className="mt-1 text-xs font-medium text-gray-400">
                 Fair expense splitting
               </p>
             </div>
@@ -43,7 +43,7 @@ export default function App() {
             type="button"
             aria-label="Settings"
             onClick={() => setPeopleOpen(true)}
-            className="pressable grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
+            className="pressable grid h-10 w-10 place-items-center rounded-full border border-black/[0.08] bg-white/60 text-gray-500 hover:bg-black/[0.06]"
           >
             <SettingsIcon className="h-5 w-5" />
           </button>

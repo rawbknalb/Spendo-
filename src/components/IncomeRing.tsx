@@ -38,7 +38,7 @@ export function IncomeRing({ ratioA, ratioB, nameA, nameB }: IncomeRingProps) {
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.08)"
+          stroke="rgba(0,0,0,0.06)"
           strokeWidth={stroke}
         />
 
@@ -72,16 +72,16 @@ export function IncomeRing({ ratioA, ratioB, nameA, nameB }: IncomeRingProps) {
 
       <div className="absolute inset-0 grid place-items-center text-center">
         <div>
-          <div className="text-[10px] font-semibold uppercase tracking-wide text-white/50">
+          <div className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">
             {nameA.split(' ')[0]}
           </div>
-          <div className="text-xs font-bold text-white">
+          <div className="text-xs font-bold text-violet-600">
             {Math.round(ratioA * 100)}%
           </div>
-          <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-white/50">
+          <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">
             {nameB.split(' ')[0]}
           </div>
-          <div className="text-xs font-bold" style={{ color: '#22d3ee' }}>
+          <div className="text-xs font-bold text-cyan-700">
             {Math.round(ratioB * 100)}%
           </div>
         </div>

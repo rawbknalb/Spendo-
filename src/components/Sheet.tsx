@@ -28,7 +28,7 @@ export function Sheet({ open, title, onClose, children }: SheetProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/20 backdrop-blur-sm animate-fade-in"
         onClick={onClose}
       />
       <div className="glass-strong glass-sheen relative z-10 w-full max-w-md animate-slide-up rounded-b-none rounded-t-5xl p-6 sm:animate-scale-in sm:rounded-4xl">
@@ -38,7 +38,7 @@ export function Sheet({ open, title, onClose, children }: SheetProps) {
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="pressable grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white/70 hover:bg-white/15"
+            className="pressable grid h-9 w-9 place-items-center rounded-full bg-black/[0.06] text-gray-500 hover:bg-black/[0.10]"
           >
             <X className="h-5 w-5" />
           </button>
