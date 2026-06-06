@@ -45,7 +45,7 @@ export function AddExpenseSheet({
       <div className="space-y-5">
         {/* Label */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-white/50">
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
             What is it?
           </label>
           <input
@@ -55,17 +55,17 @@ export function AddExpenseSheet({
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submit()}
-            className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-base outline-none placeholder:text-white/30 focus:border-white/25"
+            className="w-full rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 text-base outline-none placeholder:text-gray-300 focus:border-black/[0.18]"
           />
         </div>
 
         {/* Amount */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-white/50">
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
             Monthly amount
           </label>
-          <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 focus-within:border-white/25">
-            <span className="text-2xl font-semibold text-white/50">
+          <div className="flex items-center gap-2 rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 focus-within:border-black/[0.18]">
+            <span className="text-2xl font-semibold text-gray-300">
               {currencySymbol(currency)}
             </span>
             <input
@@ -74,14 +74,14 @@ export function AddExpenseSheet({
               value={amount}
               onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))}
               onKeyDown={(e) => e.key === 'Enter' && submit()}
-              className="tabular w-full bg-transparent text-3xl font-bold tracking-tight outline-none placeholder:text-white/25"
+              className="tabular w-full bg-transparent text-3xl font-bold tracking-tight outline-none placeholder:text-gray-200"
             />
           </div>
         </div>
 
         {/* Category */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-white/50">
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
             Category
           </label>
           <div className="grid grid-cols-5 gap-2">
@@ -94,7 +94,7 @@ export function AddExpenseSheet({
                   title={cat.label}
                   onClick={() => setCategoryId(cat.id)}
                   className={`pressable grid aspect-square place-items-center rounded-2xl text-xl transition-all ${
-                    selected ? 'ring-2 ring-white/80' : 'opacity-70 hover:opacity-100'
+                    selected ? 'ring-2 ring-black/40' : 'opacity-70 hover:opacity-100'
                   }`}
                   style={{
                     background: `linear-gradient(135deg, ${cat.from}, ${cat.to})`,
@@ -105,7 +105,7 @@ export function AddExpenseSheet({
               )
             })}
           </div>
-          <p className="mt-2 text-center text-xs font-medium text-white/55">
+          <p className="mt-2 text-center text-xs font-medium text-gray-400">
             {CATEGORIES.find((c) => c.id === categoryId)?.label}
           </p>
         </div>
@@ -114,7 +114,7 @@ export function AddExpenseSheet({
           type="button"
           disabled={!valid}
           onClick={submit}
-          className="pressable w-full rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 py-3.5 text-base font-semibold shadow-lg shadow-violet-500/25 transition-opacity disabled:opacity-40"
+          className="pressable w-full rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 py-3.5 text-base font-semibold text-white shadow-lg shadow-violet-500/25 transition-opacity disabled:opacity-40"
         >
           Add expense
         </button>
