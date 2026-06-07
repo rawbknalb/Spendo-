@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Plus, Scale, Settings as SettingsIcon } from 'lucide-react'
 import { useSplitter } from './hooks/useSplitter'
 import { computeSplit } from './lib/splitter'
+import type { Expense } from './types'
 import { Background } from './components/Background'
 import { SplitSummaryCard } from './components/SplitSummaryCard'
 import { ExpenseList } from './components/ExpenseList'
@@ -9,9 +10,10 @@ import { AddExpenseSheet } from './components/AddExpenseSheet'
 import { PeopleSheet } from './components/PeopleSheet'
 
 export default function App() {
-  const { expenses, settings, addExpense, removeExpense, updateSettings } = useSplitter()
+  const { expenses, settings, addExpense, removeExpense, updateExpense, updateSettings } = useSplitter()
 
   const [addOpen, setAddOpen] = useState(false)
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
   const [peopleOpen, setPeopleOpen] = useState(false)
 
   const split = useMemo(
@@ -24,7 +26,6 @@ export default function App() {
       <Background />
 
       <div className="mx-auto min-h-screen w-full max-w-2xl px-4 pb-32 pt-[max(2rem,env(safe-area-inset-top))] sm:px-6">
-        {/* Header */}
         <header className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="grid h-10 w-10 place-items-center rounded-2xl bg-[#111111]">
@@ -54,12 +55,12 @@ export default function App() {
           <ExpenseList
             expenses={expenses}
             currency={settings.currency}
+            onEdit={setEditingExpense}
             onRemove={removeExpense}
           />
         </main>
       </div>
 
-      {/* Floating add button */}
       <button
         type="button"
         aria-label="Add expense"
@@ -70,12 +71,26 @@ export default function App() {
         Add expense
       </button>
 
+      {/* Add */}
       <AddExpenseSheet
         open={addOpen}
         currency={settings.currency}
         onClose={() => setAddOpen(false)}
-        onAdd={addExpense}
+        onSubmit={addExpense}
       />
+
+      {/* Edit */}
+      <AddExpenseSheet
+        open={editingExpense !== null}
+        currency={settings.currency}
+        expense={editingExpense ?? undefined}
+        onClose={() => setEditingExpense(null)}
+        onSubmit={(data) => {
+          if (editingExpense) updateExpense(editingExpense.id, data)
+          setEditingExpense(null)
+        }}
+      />
+
       <PeopleSheet
         open={peopleOpen}
         settings={settings}

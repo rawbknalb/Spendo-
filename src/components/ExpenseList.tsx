@@ -7,10 +7,11 @@ import { GlassCard } from './GlassCard'
 interface ExpenseListProps {
   expenses: Expense[]
   currency: string
+  onEdit: (expense: Expense) => void
   onRemove: (id: string) => void
 }
 
-export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) {
+export function ExpenseList({ expenses, currency, onEdit, onRemove }: ExpenseListProps) {
   const sorted = [...expenses].sort((a, b) => b.amount - a.amount)
 
   return (
@@ -31,7 +32,8 @@ export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) 
             return (
               <li
                 key={expense.id}
-                className="group flex items-center gap-3 py-3"
+                className="group flex cursor-pointer items-center gap-3 py-3 transition-colors hover:opacity-70"
+                onClick={() => onEdit(expense)}
               >
                 <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#F3F4F6]">
                   <Icon className="h-4 w-4 text-[#6B7280]" />
@@ -48,7 +50,7 @@ export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) 
                 <button
                   type="button"
                   aria-label="Delete expense"
-                  onClick={() => onRemove(expense.id)}
+                  onClick={(e) => { e.stopPropagation(); onRemove(expense.id) }}
                   className="pressable grid h-8 w-8 shrink-0 place-items-center rounded-full text-transparent transition-colors hover:bg-[#FEF2F2] hover:text-[#EF4444] group-hover:text-[#D1D5DB]"
                 >
                   <Trash2 className="h-4 w-4" />

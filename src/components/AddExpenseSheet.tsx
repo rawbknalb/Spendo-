@@ -1,38 +1,50 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CATEGORIES, getCategoryIcon } from '../lib/categories'
+import type { Expense } from '../types'
 import type { NewExpense } from '../hooks/useSplitter'
 import { Sheet } from './Sheet'
 
 interface AddExpenseSheetProps {
   open: boolean
   currency: string
+  /** When provided the sheet is in edit mode and pre-fills the form. */
+  expense?: Expense
   onClose: () => void
-  onAdd: (expense: NewExpense) => void
+  onSubmit: (data: NewExpense) => void
 }
 
-export function AddExpenseSheet({ open, currency, onClose, onAdd }: AddExpenseSheetProps) {
+export function AddExpenseSheet({ open, currency, expense, onClose, onSubmit }: AddExpenseSheetProps) {
   const [amount, setAmount] = useState('')
   const [label, setLabel] = useState('')
   const [categoryId, setCategoryId] = useState(CATEGORIES[0].id)
 
+  const editing = expense !== undefined
+
+  useEffect(() => {
+    if (open) {
+      if (expense) {
+        setLabel(expense.label)
+        setAmount(String(expense.amount))
+        setCategoryId(expense.categoryId)
+      } else {
+        setLabel('')
+        setAmount('')
+        setCategoryId(CATEGORIES[0].id)
+      }
+    }
+  }, [open, expense])
+
   const parsed = parseFloat(amount)
   const valid = !Number.isNaN(parsed) && parsed > 0 && label.trim().length > 0
 
-  function reset() {
-    setAmount('')
-    setLabel('')
-    setCategoryId(CATEGORIES[0].id)
-  }
-
   function submit() {
     if (!valid) return
-    onAdd({ label: label.trim(), amount: Math.round(parsed * 100) / 100, categoryId })
-    reset()
+    onSubmit({ label: label.trim(), amount: Math.round(parsed * 100) / 100, categoryId })
     onClose()
   }
 
   return (
-    <Sheet open={open} title="Add expense" onClose={onClose}>
+    <Sheet open={open} title={editing ? 'Edit expense' : 'Add expense'} onClose={onClose}>
       <div className="space-y-5">
         <div>
           <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
@@ -104,7 +116,7 @@ export function AddExpenseSheet({ open, currency, onClose, onAdd }: AddExpenseSh
           onClick={submit}
           className="pressable w-full rounded-xl bg-[#111111] py-3.5 text-sm font-semibold text-white transition-opacity disabled:opacity-30"
         >
-          Add expense
+          {editing ? 'Save changes' : 'Add expense'}
         </button>
       </div>
     </Sheet>

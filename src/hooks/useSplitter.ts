@@ -54,6 +54,14 @@ export function useSplitter() {
     })
   }, [])
 
+  const updateExpense = useCallback((id: string, input: NewExpense) => {
+    setExpenses((prev) => {
+      const next = prev.map((e) => (e.id === id ? { ...e, ...input } : e))
+      saveExpenses(next)
+      return next
+    })
+  }, [])
+
   const updateSettings = useCallback((patch: Partial<SplitterSettings>) => {
     setSettings((prev) => {
       const next = { ...prev, ...patch }
@@ -62,5 +70,5 @@ export function useSplitter() {
     })
   }, [])
 
-  return { expenses, settings, addExpense, removeExpense, updateSettings }
+  return { expenses, settings, addExpense, removeExpense, updateExpense, updateSettings }
 }
