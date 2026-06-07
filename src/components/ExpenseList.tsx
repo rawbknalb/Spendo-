@@ -1,6 +1,6 @@
 import { Trash2 } from 'lucide-react'
 import type { Expense } from '../types'
-import { getCategory } from '../lib/categories'
+import { getCategory, getCategoryIcon } from '../lib/categories'
 import { formatMoney } from '../lib/format'
 import { GlassCard } from './GlassCard'
 
@@ -25,18 +25,19 @@ export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) 
         <ul className="mt-4 space-y-1.5">
           {sorted.map((expense) => {
             const cat = getCategory(expense.categoryId)
+            const Icon = getCategoryIcon(expense.categoryId)
             return (
               <li
                 key={expense.id}
-                className="group flex items-center gap-3 rounded-2xl px-2 py-2 transition-colors hover:bg-white/5"
+                className="group flex items-center gap-3 rounded-2xl px-2 py-2 transition-colors hover:bg-black/[0.03]"
               >
                 <span
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-lg"
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
                   style={{
                     background: `linear-gradient(135deg, ${cat.from}, ${cat.to})`,
                   }}
                 >
-                  {cat.emoji}
+                  <Icon className="h-5 w-5 text-white" />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm font-medium">{expense.label}</div>
@@ -49,7 +50,7 @@ export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) 
                   type="button"
                   aria-label="Delete expense"
                   onClick={() => onRemove(expense.id)}
-                  className="pressable grid h-8 w-8 shrink-0 place-items-center rounded-full text-transparent transition-colors hover:bg-rose-100 hover:text-rose-600 group-hover:text-gray-400"
+                  className="pressable grid h-8 w-8 shrink-0 place-items-center rounded-full text-transparent transition-colors hover:bg-red-50 hover:text-red-500 group-hover:text-gray-300"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

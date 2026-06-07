@@ -41,8 +41,8 @@ export function SplitSummaryCard({ split, settings }: SplitSummaryCardProps) {
           pctOfIncome={pctOfIncomeA}
           currency={currency}
           hasIncome={hasIncome}
-          colorClass="text-blue-600"
-          bgClass="bg-blue-100"
+          colorClass="text-[#007AFF]"
+          bgClass="bg-[#007AFF]/10"
         />
         <PersonRow
           name={personB.name}
@@ -51,8 +51,8 @@ export function SplitSummaryCard({ split, settings }: SplitSummaryCardProps) {
           pctOfIncome={pctOfIncomeA}
           currency={currency}
           hasIncome={hasIncome}
-          colorClass="text-emerald-700"
-          bgClass="bg-emerald-100"
+          colorClass="text-[#1a9e3f]"
+          bgClass="bg-[#34C759]/10"
         />
       </div>
 

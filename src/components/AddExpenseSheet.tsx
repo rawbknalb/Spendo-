@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CATEGORIES } from '../lib/categories'
+import { CATEGORIES, getCategoryIcon } from '../lib/categories'
 import type { NewExpense } from '../hooks/useSplitter'
 import { Sheet } from './Sheet'
 
@@ -55,7 +55,7 @@ export function AddExpenseSheet({
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submit()}
-            className="w-full rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 text-base outline-none placeholder:text-gray-300 focus:border-black/[0.18]"
+            className="w-full rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 text-base outline-none placeholder:text-gray-300 focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10"
           />
         </div>
 
@@ -64,7 +64,7 @@ export function AddExpenseSheet({
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
             Monthly amount
           </label>
-          <div className="flex items-center gap-2 rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 focus-within:border-black/[0.18]">
+          <div className="flex items-center gap-2 rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 focus-within:border-[#007AFF]/40 focus-within:ring-2 focus-within:ring-[#007AFF]/10">
             <span className="text-2xl font-semibold text-gray-300">
               {currencySymbol(currency)}
             </span>
@@ -87,20 +87,21 @@ export function AddExpenseSheet({
           <div className="grid grid-cols-5 gap-2">
             {CATEGORIES.map((cat) => {
               const selected = cat.id === categoryId
+              const Icon = getCategoryIcon(cat.id)
               return (
                 <button
                   key={cat.id}
                   type="button"
                   title={cat.label}
                   onClick={() => setCategoryId(cat.id)}
-                  className={`pressable grid aspect-square place-items-center rounded-2xl text-xl transition-all ${
-                    selected ? 'ring-2 ring-black/40' : 'opacity-70 hover:opacity-100'
+                  className={`pressable grid aspect-square place-items-center rounded-2xl transition-all ${
+                    selected ? 'ring-2 ring-black/30 ring-offset-1' : 'opacity-60 hover:opacity-90'
                   }`}
                   style={{
                     background: `linear-gradient(135deg, ${cat.from}, ${cat.to})`,
                   }}
                 >
-                  {cat.emoji}
+                  <Icon className="h-5 w-5 text-white" />
                 </button>
               )
             })}
@@ -114,7 +115,7 @@ export function AddExpenseSheet({
           type="button"
           disabled={!valid}
           onClick={submit}
-          className="pressable w-full rounded-2xl bg-blue-600 py-3.5 text-base font-semibold text-white shadow-lg shadow-blue-600/20 transition-opacity disabled:opacity-40"
+          className="pressable w-full rounded-2xl bg-[#007AFF] py-3.5 text-base font-semibold text-white shadow-lg shadow-[#007AFF]/20 transition-opacity disabled:opacity-40"
         >
           Add expense
         </button>

@@ -74,7 +74,7 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
         {/* Person A */}
         <PersonSection
           label="Person A"
-          accentClass="text-blue-600"
+          accentClass="text-[#007AFF]"
           name={nameA}
           income={incomeA}
           currency={currency}
@@ -85,7 +85,7 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
         {/* Person B */}
         <PersonSection
           label="Person B"
-          accentClass="text-emerald-700"
+          accentClass="text-[#1a9e3f]"
           name={nameB}
           income={incomeB}
           currency={currency}
@@ -96,7 +96,7 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
         <button
           type="button"
           onClick={save}
-          className="pressable w-full rounded-2xl bg-blue-600 py-3.5 text-base font-semibold text-white shadow-lg shadow-blue-600/20"
+          className="pressable w-full rounded-2xl bg-[#007AFF] py-3.5 text-base font-semibold text-white shadow-lg shadow-[#007AFF]/20"
         >
           Save
         </button>

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Plus, Settings as SettingsIcon } from 'lucide-react'
+import { Plus, Scale, Settings as SettingsIcon } from 'lucide-react'
 import { useSplitter } from './hooks/useSplitter'
 import { computeSplit } from './lib/splitter'
 import { Background } from './components/Background'
@@ -27,8 +27,8 @@ export default function App() {
         {/* Header */}
         <header className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-600 text-xl shadow-lg shadow-blue-600/25">
-              🤝
+            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#007AFF] shadow-lg shadow-[#007AFF]/25">
+              <Scale className="h-5 w-5 text-white" />
             </div>
             <div>
               <h1 className="text-xl font-bold leading-none tracking-tight">
@@ -64,7 +64,7 @@ export default function App() {
         type="button"
         aria-label="Add expense"
         onClick={() => setAddOpen(true)}
-        className="pressable fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-blue-600 px-6 py-4 text-base font-semibold shadow-xl shadow-blue-600/30 ring-1 ring-white/20"
+        className="pressable fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#007AFF] px-6 py-4 text-base font-semibold shadow-xl shadow-[#007AFF]/25 ring-1 ring-white/20"
       >
         <Plus className="h-5 w-5" />
         Add expense
