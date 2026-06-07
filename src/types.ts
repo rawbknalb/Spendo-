@@ -1,8 +1,6 @@
 export interface Category {
   id: string
   label: string
-  from: string
-  to: string
 }
 
 export interface Expense {

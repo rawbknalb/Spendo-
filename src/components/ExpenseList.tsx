@@ -15,42 +15,41 @@ export function ExpenseList({ expenses, currency, onRemove }: ExpenseListProps) 
 
   return (
     <GlassCard className="animate-fade-in p-6">
-      <h2 className="text-lg font-semibold tracking-tight">Shared expenses</h2>
+      <h2 className="text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
+        Shared expenses
+      </h2>
 
       {sorted.length === 0 ? (
-        <p className="mt-6 text-sm text-gray-400">
-          No shared expenses yet. Tap + to add your first one.
+        <p className="mt-5 text-sm text-[#9CA3AF]">
+          No expenses yet. Tap + to add one.
         </p>
       ) : (
-        <ul className="mt-4 space-y-1.5">
+        <ul className="mt-4 divide-y divide-[#F3F4F6]">
           {sorted.map((expense) => {
             const cat = getCategory(expense.categoryId)
             const Icon = getCategoryIcon(expense.categoryId)
             return (
               <li
                 key={expense.id}
-                className="group flex items-center gap-3 rounded-2xl px-2 py-2 transition-colors hover:bg-black/[0.03]"
+                className="group flex items-center gap-3 py-3"
               >
-                <span
-                  className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${cat.from}, ${cat.to})`,
-                  }}
-                >
-                  <Icon className="h-5 w-5 text-white" />
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#F3F4F6]">
+                  <Icon className="h-4 w-4 text-[#6B7280]" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-medium">{expense.label}</div>
-                  <div className="truncate text-xs text-gray-400">{cat.label}</div>
+                  <p className="truncate text-sm font-medium text-[#111111]">
+                    {expense.label}
+                  </p>
+                  <p className="truncate text-xs text-[#9CA3AF]">{cat.label}</p>
                 </div>
-                <span className="tabular shrink-0 text-sm font-semibold">
+                <span className="tabular shrink-0 text-sm font-semibold text-[#111111]">
                   {formatMoney(expense.amount, currency)}
                 </span>
                 <button
                   type="button"
                   aria-label="Delete expense"
                   onClick={() => onRemove(expense.id)}
-                  className="pressable grid h-8 w-8 shrink-0 place-items-center rounded-full text-transparent transition-colors hover:bg-red-50 hover:text-red-500 group-hover:text-gray-300"
+                  className="pressable grid h-8 w-8 shrink-0 place-items-center rounded-full text-transparent transition-colors hover:bg-[#FEF2F2] hover:text-[#EF4444] group-hover:text-[#D1D5DB]"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

@@ -27,14 +27,14 @@ export default function App() {
         {/* Header */}
         <header className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[#007AFF] shadow-lg shadow-[#007AFF]/25">
+            <div className="grid h-10 w-10 place-items-center rounded-2xl bg-[#111111]">
               <Scale className="h-5 w-5 text-white" />
             </div>
             <div>
               <h1 className="text-xl font-bold leading-none tracking-tight">
                 Spendo
               </h1>
-              <p className="mt-1 text-xs font-medium text-gray-400">
+              <p className="mt-0.5 text-xs text-[#9CA3AF]">
                 Fair expense splitting
               </p>
             </div>
@@ -43,7 +43,7 @@ export default function App() {
             type="button"
             aria-label="Settings"
             onClick={() => setPeopleOpen(true)}
-            className="pressable grid h-10 w-10 place-items-center rounded-full border border-black/[0.08] bg-white/60 text-gray-500 hover:bg-black/[0.06]"
+            className="pressable grid h-9 w-9 place-items-center rounded-full border border-[#E5E7EB] bg-white text-[#6B7280] hover:bg-[#F3F4F6]"
           >
             <SettingsIcon className="h-5 w-5" />
           </button>
@@ -64,7 +64,7 @@ export default function App() {
         type="button"
         aria-label="Add expense"
         onClick={() => setAddOpen(true)}
-        className="pressable fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#007AFF] px-6 py-4 text-base font-semibold shadow-xl shadow-[#007AFF]/25 ring-1 ring-white/20"
+        className="pressable fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#111111] px-6 py-3.5 text-sm font-semibold text-white shadow-lg"
       >
         <Plus className="h-5 w-5" />
         Add expense

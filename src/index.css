@@ -14,14 +14,13 @@
   }
 
   body {
-    @apply bg-[#F2F2F7] text-[#1C1C1E] antialiased;
+    @apply bg-[#F7F7F7] text-[#111111] antialiased;
     font-feature-settings: 'cv11', 'ss01';
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
   }
 
-  /* Tabular figures for money so columns line up */
   .tabular {
     font-variant-numeric: tabular-nums;
     font-feature-settings: 'tnum';
@@ -29,32 +28,18 @@
 }
 
 @layer components {
-  /* Frosted glass surface — Apple light-mode material */
-  /* Tahoe liquid-glass surfaces */
   .glass {
-    @apply rounded-4xl border border-black/[0.05] bg-white/55 shadow-[0_2px_20px_-4px_rgba(0,0,0,0.08)] backdrop-blur-2xl;
+    @apply rounded-3xl border border-[#E5E7EB] bg-white shadow-sm;
   }
 
   .glass-strong {
-    @apply rounded-4xl border border-black/[0.06] bg-white/[0.72] shadow-[0_2px_20px_-4px_rgba(0,0,0,0.10)] backdrop-blur-2xl;
+    @apply rounded-3xl border border-[#E5E7EB] bg-white shadow;
   }
 
-  /* Liquid-glass specular highlight */
+  /* kept for GlassCard compatibility but visually neutral */
   .glass-sheen {
     position: relative;
     overflow: hidden;
-  }
-  .glass-sheen::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      170deg,
-      rgba(255, 255, 255, 0.70) 0%,
-      rgba(255, 255, 255, 0.10) 30%,
-      rgba(255, 255, 255, 0) 60%
-    );
-    pointer-events: none;
   }
 
   .pressable {
@@ -62,11 +47,5 @@
   }
 }
 
-/* Hide scrollbars but keep scrolling */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

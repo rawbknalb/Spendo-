@@ -33,24 +33,17 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
     const parsedB = parseFloat(incomeB)
     onSave({
       currency,
-      personA: {
-        name: nameA.trim() || 'Person A',
-        income: Number.isNaN(parsedA) || parsedA < 0 ? 0 : parsedA,
-      },
-      personB: {
-        name: nameB.trim() || 'Person B',
-        income: Number.isNaN(parsedB) || parsedB < 0 ? 0 : parsedB,
-      },
+      personA: { name: nameA.trim() || 'Person A', income: Number.isNaN(parsedA) || parsedA < 0 ? 0 : parsedA },
+      personB: { name: nameB.trim() || 'Person B', income: Number.isNaN(parsedB) || parsedB < 0 ? 0 : parsedB },
     })
     onClose()
   }
 
   return (
-    <Sheet open={open} title="People & Currency" onClose={onClose}>
+    <Sheet open={open} title="Settings" onClose={onClose}>
       <div className="space-y-6">
-        {/* Currency */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
+          <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
             Currency
           </label>
           <div className="grid grid-cols-4 gap-2">
@@ -59,10 +52,10 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
                 key={code}
                 type="button"
                 onClick={() => setCurrency(code)}
-                className={`pressable rounded-2xl border px-2 py-2.5 text-sm font-semibold transition-colors ${
+                className={`pressable rounded-xl border py-2.5 text-sm font-medium transition-colors ${
                   currency === code
-                    ? 'border-black/30 bg-black/[0.08]'
-                    : 'border-black/[0.08] bg-black/[0.04] text-gray-500 hover:bg-black/[0.06]'
+                    ? 'border-[#111111] bg-[#111111] text-white'
+                    : 'border-[#E5E7EB] bg-[#F9FAFB] text-[#6B7280] hover:border-[#9CA3AF]'
                 }`}
               >
                 {code}
@@ -71,10 +64,8 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
           </div>
         </div>
 
-        {/* Person A */}
         <PersonSection
-          label="Person A"
-          accentClass="text-[#007AFF]"
+          label="Person 1"
           name={nameA}
           income={incomeA}
           currency={currency}
@@ -82,10 +73,8 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
           onIncomeChange={setIncomeA}
         />
 
-        {/* Person B */}
         <PersonSection
-          label="Person B"
-          accentClass="text-[#1a9e3f]"
+          label="Person 2"
           name={nameB}
           income={incomeB}
           currency={currency}
@@ -96,7 +85,7 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
         <button
           type="button"
           onClick={save}
-          className="pressable w-full rounded-2xl bg-[#007AFF] py-3.5 text-base font-semibold text-white shadow-lg shadow-[#007AFF]/20"
+          className="pressable w-full rounded-xl bg-[#111111] py-3.5 text-sm font-semibold text-white"
         >
           Save
         </button>
@@ -107,7 +96,6 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
 
 interface PersonSectionProps {
   label: string
-  accentClass: string
   name: string
   income: string
   currency: string
@@ -115,39 +103,27 @@ interface PersonSectionProps {
   onIncomeChange: (v: string) => void
 }
 
-function PersonSection({
-  label,
-  accentClass,
-  name,
-  income,
-  currency,
-  onNameChange,
-  onIncomeChange,
-}: PersonSectionProps) {
+function PersonSection({ label, name, income, currency, onNameChange, onIncomeChange }: PersonSectionProps) {
   return (
     <div className="space-y-3">
-      <p className={`text-sm font-semibold ${accentClass}`}>{label}</p>
+      <p className="text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">{label}</p>
       <div>
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
-          Name
-        </label>
+        <label className="mb-1 block text-xs text-[#9CA3AF]">Name</label>
         <input
           type="text"
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
-          className="w-full rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 text-sm outline-none placeholder:text-gray-300 focus:border-black/[0.18]"
+          className="w-full rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#111111]"
         />
       </div>
       <div>
-        <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
-          Monthly income ({currency})
-        </label>
+        <label className="mb-1 block text-xs text-[#9CA3AF]">Monthly income ({currency})</label>
         <input
           inputMode="decimal"
           placeholder="0"
           value={income}
           onChange={(e) => onIncomeChange(e.target.value.replace(/[^0-9.]/g, ''))}
-          className="tabular w-full rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 text-lg font-semibold outline-none focus:border-black/[0.18]"
+          className="tabular w-full rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-lg font-semibold outline-none focus:border-[#111111]"
         />
       </div>
     </div>

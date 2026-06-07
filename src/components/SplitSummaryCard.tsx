@@ -3,7 +3,6 @@ import type { SplitterSettings } from '../types'
 import type { SplitResult } from '../lib/splitter'
 import { formatMoney } from '../lib/format'
 import { GlassCard } from './GlassCard'
-import { IncomeRing } from './IncomeRing'
 
 interface SplitSummaryCardProps {
   split: SplitResult
@@ -16,24 +15,23 @@ export function SplitSummaryCard({ split, settings }: SplitSummaryCardProps) {
 
   return (
     <GlassCard strong className="animate-scale-in p-6 sm:p-7">
-      {/* Header row */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-gray-400">Monthly shared expenses</p>
-          <p className="tabular mt-1 break-words text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-            {formatMoney(total, currency)}
-          </p>
-        </div>
-        <IncomeRing
-          ratioA={ratioA}
-          ratioB={ratioB}
-          nameA={personA.name}
-          nameB={personB.name}
+      <p className="text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
+        Monthly shared expenses
+      </p>
+      <p className="tabular mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
+        {formatMoney(total, currency)}
+      </p>
+
+      {/* Split bar */}
+      <div className="mt-5 h-[3px] overflow-hidden rounded-full bg-[#F3F4F6]">
+        <div
+          className="h-full rounded-full bg-[#111111] transition-all duration-700"
+          style={{ width: `${ratioA * 100}%` }}
         />
       </div>
 
       {/* Person rows */}
-      <div className="mt-5 space-y-3">
+      <div className="mt-4 divide-y divide-[#F3F4F6]">
         <PersonRow
           name={personA.name}
           share={shareA}
@@ -41,8 +39,7 @@ export function SplitSummaryCard({ split, settings }: SplitSummaryCardProps) {
           pctOfIncome={pctOfIncomeA}
           currency={currency}
           hasIncome={hasIncome}
-          colorClass="text-[#007AFF]"
-          bgClass="bg-[#007AFF]/10"
+          primary
         />
         <PersonRow
           name={personB.name}
@@ -51,20 +48,18 @@ export function SplitSummaryCard({ split, settings }: SplitSummaryCardProps) {
           pctOfIncome={pctOfIncomeA}
           currency={currency}
           hasIncome={hasIncome}
-          colorClass="text-[#1a9e3f]"
-          bgClass="bg-[#34C759]/10"
+          primary={false}
         />
       </div>
 
-      {/* Footer */}
       {hasIncome ? (
-        <p className="mt-4 text-xs text-gray-400">
-          Both contribute ~{pctOfIncomeA.toFixed(1)}% of their income
+        <p className="mt-4 text-xs text-[#9CA3AF]">
+          Each contributes {pctOfIncomeA.toFixed(1)}% of their income
         </p>
       ) : (
-        <div className="mt-4 flex items-start gap-2 rounded-2xl bg-amber-50 px-3 py-2.5 text-xs text-amber-700">
-          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-          <span>Add your incomes in settings for a fair, income-proportional split</span>
+        <div className="mt-4 flex items-start gap-2 rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] px-3 py-2.5 text-xs text-[#6B7280]">
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#9CA3AF]" />
+          <span>Add incomes in settings for a proportional split</span>
         </div>
       )}
     </GlassCard>
@@ -78,32 +73,22 @@ interface PersonRowProps {
   pctOfIncome: number
   currency: string
   hasIncome: boolean
-  colorClass: string
-  bgClass: string
+  primary: boolean
 }
 
-function PersonRow({
-  name,
-  share,
-  ratio,
-  pctOfIncome,
-  currency,
-  hasIncome,
-  colorClass,
-  bgClass,
-}: PersonRowProps) {
+function PersonRow({ name, share, ratio, pctOfIncome, currency, hasIncome, primary }: PersonRowProps) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-2xl bg-black/[0.04] px-4 py-3">
-      <div className="flex items-center gap-2 min-w-0">
-        <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${bgClass} ${colorClass}`}>
+    <div className="flex items-center justify-between gap-4 py-3">
+      <div className="min-w-0">
+        <p className={`text-sm font-semibold ${primary ? 'text-[#111111]' : 'text-[#6B7280]'}`}>
           {name}
-        </span>
-        <span className="truncate text-xs text-gray-400">
-          {Math.round(ratio * 100)}% of expenses
+        </p>
+        <p className="mt-0.5 text-xs text-[#9CA3AF]">
+          {Math.round(ratio * 100)}% of total
           {hasIncome && ` · ${pctOfIncome.toFixed(1)}% of income`}
-        </span>
+        </p>
       </div>
-      <span className={`tabular shrink-0 text-lg font-bold ${colorClass}`}>
+      <span className={`tabular shrink-0 text-lg font-bold ${primary ? 'text-[#111111]' : 'text-[#6B7280]'}`}>
         {formatMoney(share, currency)}
       </span>
     </div>

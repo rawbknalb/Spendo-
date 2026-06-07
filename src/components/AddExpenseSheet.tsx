@@ -10,12 +10,7 @@ interface AddExpenseSheetProps {
   onAdd: (expense: NewExpense) => void
 }
 
-export function AddExpenseSheet({
-  open,
-  currency,
-  onClose,
-  onAdd,
-}: AddExpenseSheetProps) {
+export function AddExpenseSheet({ open, currency, onClose, onAdd }: AddExpenseSheetProps) {
   const [amount, setAmount] = useState('')
   const [label, setLabel] = useState('')
   const [categoryId, setCategoryId] = useState(CATEGORIES[0].id)
@@ -31,11 +26,7 @@ export function AddExpenseSheet({
 
   function submit() {
     if (!valid) return
-    onAdd({
-      label: label.trim(),
-      amount: Math.round(parsed * 100) / 100,
-      categoryId,
-    })
+    onAdd({ label: label.trim(), amount: Math.round(parsed * 100) / 100, categoryId })
     reset()
     onClose()
   }
@@ -43,29 +34,27 @@ export function AddExpenseSheet({
   return (
     <Sheet open={open} title="Add expense" onClose={onClose}>
       <div className="space-y-5">
-        {/* Label */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
-            What is it?
+          <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
+            Description
           </label>
           <input
             autoFocus
             type="text"
-            placeholder="e.g. Rent, Netflix, Gym…"
+            placeholder="e.g. Rent, Netflix, Gym"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submit()}
-            className="w-full rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 text-base outline-none placeholder:text-gray-300 focus:border-[#007AFF]/40 focus:ring-2 focus:ring-[#007AFF]/10"
+            className="w-full rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-sm outline-none placeholder:text-[#D1D5DB] focus:border-[#111111]"
           />
         </div>
 
-        {/* Amount */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
+          <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
             Monthly amount
           </label>
-          <div className="flex items-center gap-2 rounded-2xl border border-black/[0.08] bg-black/[0.04] px-4 py-3 focus-within:border-[#007AFF]/40 focus-within:ring-2 focus-within:ring-[#007AFF]/10">
-            <span className="text-2xl font-semibold text-gray-300">
+          <div className="flex items-center gap-2 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 focus-within:border-[#111111]">
+            <span className="text-xl font-semibold text-[#D1D5DB]">
               {currencySymbol(currency)}
             </span>
             <input
@@ -74,14 +63,13 @@ export function AddExpenseSheet({
               value={amount}
               onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))}
               onKeyDown={(e) => e.key === 'Enter' && submit()}
-              className="tabular w-full bg-transparent text-3xl font-bold tracking-tight outline-none placeholder:text-gray-200"
+              className="tabular w-full bg-transparent text-3xl font-bold tracking-tight text-[#111111] outline-none placeholder:text-[#E5E7EB]"
             />
           </div>
         </div>
 
-        {/* Category */}
         <div>
-          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-gray-400">
+          <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
             Category
           </label>
           <div className="grid grid-cols-5 gap-2">
@@ -94,19 +82,18 @@ export function AddExpenseSheet({
                   type="button"
                   title={cat.label}
                   onClick={() => setCategoryId(cat.id)}
-                  className={`pressable grid aspect-square place-items-center rounded-2xl transition-all ${
-                    selected ? 'ring-2 ring-black/30 ring-offset-1' : 'opacity-60 hover:opacity-90'
+                  className={`pressable grid aspect-square place-items-center rounded-xl border transition-colors ${
+                    selected
+                      ? 'border-[#111111] bg-[#111111]'
+                      : 'border-[#E5E7EB] bg-[#F9FAFB] hover:border-[#9CA3AF]'
                   }`}
-                  style={{
-                    background: `linear-gradient(135deg, ${cat.from}, ${cat.to})`,
-                  }}
                 >
-                  <Icon className="h-5 w-5 text-white" />
+                  <Icon className={`h-5 w-5 ${selected ? 'text-white' : 'text-[#6B7280]'}`} />
                 </button>
               )
             })}
           </div>
-          <p className="mt-2 text-center text-xs font-medium text-gray-400">
+          <p className="mt-2 text-center text-xs text-[#9CA3AF]">
             {CATEGORIES.find((c) => c.id === categoryId)?.label}
           </p>
         </div>
@@ -115,7 +102,7 @@ export function AddExpenseSheet({
           type="button"
           disabled={!valid}
           onClick={submit}
-          className="pressable w-full rounded-2xl bg-[#007AFF] py-3.5 text-base font-semibold text-white shadow-lg shadow-[#007AFF]/20 transition-opacity disabled:opacity-40"
+          className="pressable w-full rounded-xl bg-[#111111] py-3.5 text-sm font-semibold text-white transition-opacity disabled:opacity-30"
         >
           Add expense
         </button>
