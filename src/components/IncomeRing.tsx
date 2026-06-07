@@ -23,12 +23,12 @@ export function IncomeRing({ ratioA, ratioB, nameA, nameB }: IncomeRingProps) {
       <svg width={size} height={size} className="-rotate-90">
         <defs>
           <linearGradient id={gradIdA} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#a78bfa" />
-            <stop offset="100%" stopColor="#e879f9" />
+            <stop offset="0%" stopColor="#60a5fa" />
+            <stop offset="100%" stopColor="#2563eb" />
           </linearGradient>
           <linearGradient id={gradIdB} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#22d3ee" />
-            <stop offset="100%" stopColor="#34d399" />
+            <stop offset="0%" stopColor="#34d399" />
+            <stop offset="100%" stopColor="#059669" />
           </linearGradient>
         </defs>
 
@@ -75,13 +75,13 @@ export function IncomeRing({ ratioA, ratioB, nameA, nameB }: IncomeRingProps) {
           <div className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">
             {nameA.split(' ')[0]}
           </div>
-          <div className="text-xs font-bold text-violet-600">
+          <div className="text-xs font-bold text-blue-600">
             {Math.round(ratioA * 100)}%
           </div>
           <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">
             {nameB.split(' ')[0]}
           </div>
-          <div className="text-xs font-bold text-cyan-700">
+          <div className="text-xs font-bold text-emerald-700">
             {Math.round(ratioB * 100)}%
           </div>
         </div>

@@ -114,7 +114,7 @@ export function AddExpenseSheet({
           type="button"
           disabled={!valid}
           onClick={submit}
-          className="pressable w-full rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 py-3.5 text-base font-semibold text-white shadow-lg shadow-violet-500/25 transition-opacity disabled:opacity-40"
+          className="pressable w-full rounded-2xl bg-blue-600 py-3.5 text-base font-semibold text-white shadow-lg shadow-blue-600/20 transition-opacity disabled:opacity-40"
         >
           Add expense
         </button>
