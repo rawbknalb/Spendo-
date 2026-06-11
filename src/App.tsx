@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Plus, Scale, Settings as SettingsIcon } from 'lucide-react'
 import { useSplitter } from './hooks/useSplitter'
 import { computeSplit } from './lib/splitter'
@@ -12,13 +12,37 @@ import { PeopleSheet } from './components/PeopleSheet'
 export default function App() {
   const { expenses, settings, addExpense, removeExpense, updateExpense, updateSettings } = useSplitter()
 
-  const [addOpen, setAddOpen] = useState(false)
+  // One sheet handles both add and edit; `editingExpense` decides the mode.
+  const [sheetOpen, setSheetOpen] = useState(false)
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null)
   const [peopleOpen, setPeopleOpen] = useState(false)
 
   const split = useMemo(
     () => computeSplit(expenses, settings),
     [expenses, settings],
+  )
+
+  const openAdd = useCallback(() => {
+    setEditingExpense(null)
+    setSheetOpen(true)
+  }, [])
+
+  const openEdit = useCallback((expense: Expense) => {
+    setEditingExpense(expense)
+    setSheetOpen(true)
+  }, [])
+
+  const closeSheet = useCallback(() => setSheetOpen(false), [])
+
+  const submitExpense = useCallback(
+    (data: { label: string; amount: number; categoryId: string }) => {
+      if (editingExpense) {
+        updateExpense(editingExpense.id, data)
+      } else {
+        addExpense(data)
+      }
+    },
+    [editingExpense, updateExpense, addExpense],
   )
 
   return (
@@ -55,7 +79,7 @@ export default function App() {
           <ExpenseList
             expenses={expenses}
             currency={settings.currency}
-            onEdit={setEditingExpense}
+            onEdit={openEdit}
             onRemove={removeExpense}
           />
         </main>
@@ -64,33 +88,20 @@ export default function App() {
       <button
         type="button"
         aria-label="Add expense"
-        onClick={() => setAddOpen(true)}
+        onClick={openAdd}
         className="pressable fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#111111] px-6 py-3.5 text-sm font-semibold text-white shadow-lg"
       >
         <Plus className="h-5 w-5" />
         Add expense
       </button>
 
-      {/* Add */}
       <AddExpenseSheet
-        open={addOpen}
-        currency={settings.currency}
-        onClose={() => setAddOpen(false)}
-        onSubmit={addExpense}
-      />
-
-      {/* Edit */}
-      <AddExpenseSheet
-        open={editingExpense !== null}
+        open={sheetOpen}
         currency={settings.currency}
         expense={editingExpense ?? undefined}
-        onClose={() => setEditingExpense(null)}
-        onSubmit={(data) => {
-          if (editingExpense) updateExpense(editingExpense.id, data)
-          setEditingExpense(null)
-        }}
+        onClose={closeSheet}
+        onSubmit={submitExpense}
       />
-
       <PeopleSheet
         open={peopleOpen}
         settings={settings}

@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react'
 import { Trash2 } from 'lucide-react'
 import type { Expense } from '../types'
 import { getCategory, getCategoryIcon } from '../lib/categories'
@@ -11,8 +12,16 @@ interface ExpenseListProps {
   onRemove: (id: string) => void
 }
 
-export function ExpenseList({ expenses, currency, onEdit, onRemove }: ExpenseListProps) {
-  const sorted = [...expenses].sort((a, b) => b.amount - a.amount)
+export const ExpenseList = memo(function ExpenseList({
+  expenses,
+  currency,
+  onEdit,
+  onRemove,
+}: ExpenseListProps) {
+  const sorted = useMemo(
+    () => [...expenses].sort((a, b) => b.amount - a.amount),
+    [expenses],
+  )
 
   return (
     <GlassCard className="animate-fade-in p-6">
@@ -62,4 +71,4 @@ export function ExpenseList({ expenses, currency, onEdit, onRemove }: ExpenseLis
       )}
     </GlassCard>
   )
-}
+})

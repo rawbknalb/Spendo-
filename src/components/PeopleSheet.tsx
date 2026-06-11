@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { SplitterSettings } from '../types'
 import { Sheet } from './Sheet'
 
@@ -12,21 +12,31 @@ interface PeopleSheetProps {
 const CURRENCIES = ['EUR', 'USD', 'GBP', 'CHF', 'CAD', 'AUD', 'JPY', 'SEK']
 
 export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProps) {
+  return (
+    <Sheet open={open} title="Settings" onClose={onClose}>
+      {/* Mounted fresh on every open (Sheet renders null when closed), so the
+          form always starts from the latest saved settings — no sync effect. */}
+      <SettingsForm settings={settings} onClose={onClose} onSave={onSave} />
+    </Sheet>
+  )
+}
+
+interface SettingsFormProps {
+  settings: SplitterSettings
+  onClose: () => void
+  onSave: (patch: Partial<SplitterSettings>) => void
+}
+
+function SettingsForm({ settings, onClose, onSave }: SettingsFormProps) {
   const [currency, setCurrency] = useState(settings.currency)
   const [nameA, setNameA] = useState(settings.personA.name)
-  const [incomeA, setIncomeA] = useState(String(settings.personA.income || ''))
+  const [incomeA, setIncomeA] = useState(
+    settings.personA.income > 0 ? String(settings.personA.income) : '',
+  )
   const [nameB, setNameB] = useState(settings.personB.name)
-  const [incomeB, setIncomeB] = useState(String(settings.personB.income || ''))
-
-  useEffect(() => {
-    if (open) {
-      setCurrency(settings.currency)
-      setNameA(settings.personA.name)
-      setIncomeA(settings.personA.income > 0 ? String(settings.personA.income) : '')
-      setNameB(settings.personB.name)
-      setIncomeB(settings.personB.income > 0 ? String(settings.personB.income) : '')
-    }
-  }, [open, settings])
+  const [incomeB, setIncomeB] = useState(
+    settings.personB.income > 0 ? String(settings.personB.income) : '',
+  )
 
   function save() {
     const parsedA = parseFloat(incomeA)
@@ -40,57 +50,55 @@ export function PeopleSheet({ open, settings, onClose, onSave }: PeopleSheetProp
   }
 
   return (
-    <Sheet open={open} title="Settings" onClose={onClose}>
-      <div className="space-y-6">
-        <div>
-          <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
-            Currency
-          </label>
-          <div className="grid grid-cols-4 gap-2">
-            {CURRENCIES.map((code) => (
-              <button
-                key={code}
-                type="button"
-                onClick={() => setCurrency(code)}
-                className={`pressable rounded-xl border py-2.5 text-sm font-medium transition-colors ${
-                  currency === code
-                    ? 'border-[#111111] bg-[#111111] text-white'
-                    : 'border-[#E5E7EB] bg-[#F9FAFB] text-[#6B7280] hover:border-[#9CA3AF]'
-                }`}
-              >
-                {code}
-              </button>
-            ))}
-          </div>
+    <div className="space-y-6">
+      <div>
+        <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-[#9CA3AF]">
+          Currency
+        </label>
+        <div className="grid grid-cols-4 gap-2">
+          {CURRENCIES.map((code) => (
+            <button
+              key={code}
+              type="button"
+              onClick={() => setCurrency(code)}
+              className={`pressable rounded-xl border py-2.5 text-sm font-medium transition-colors ${
+                currency === code
+                  ? 'border-[#111111] bg-[#111111] text-white'
+                  : 'border-[#E5E7EB] bg-[#F9FAFB] text-[#6B7280] hover:border-[#9CA3AF]'
+              }`}
+            >
+              {code}
+            </button>
+          ))}
         </div>
-
-        <PersonSection
-          label="Person 1"
-          name={nameA}
-          income={incomeA}
-          currency={currency}
-          onNameChange={setNameA}
-          onIncomeChange={setIncomeA}
-        />
-
-        <PersonSection
-          label="Person 2"
-          name={nameB}
-          income={incomeB}
-          currency={currency}
-          onNameChange={setNameB}
-          onIncomeChange={setIncomeB}
-        />
-
-        <button
-          type="button"
-          onClick={save}
-          className="pressable w-full rounded-xl bg-[#111111] py-3.5 text-sm font-semibold text-white"
-        >
-          Save
-        </button>
       </div>
-    </Sheet>
+
+      <PersonSection
+        label="Person 1"
+        name={nameA}
+        income={incomeA}
+        currency={currency}
+        onNameChange={setNameA}
+        onIncomeChange={setIncomeA}
+      />
+
+      <PersonSection
+        label="Person 2"
+        name={nameB}
+        income={incomeB}
+        currency={currency}
+        onNameChange={setNameB}
+        onIncomeChange={setIncomeB}
+      />
+
+      <button
+        type="button"
+        onClick={save}
+        className="pressable w-full rounded-xl bg-[#111111] py-3.5 text-sm font-semibold text-white"
+      >
+        Save
+      </button>
+    </div>
   )
 }
 

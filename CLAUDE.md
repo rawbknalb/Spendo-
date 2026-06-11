@@ -4,10 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Spendo is a client-only spending-overview web app (React + TypeScript + Vite +
-Tailwind) with an Apple-style frosted-glass UI. There is **no backend** — all
-state lives in the browser's `localStorage`. The whole app is a single page that
-shows one month at a time.
+Spendo is a client-only bill-splitting web app (React + TypeScript + Vite +
+Tailwind) for **two people sharing fixed monthly expenses**. The split is
+income-proportional: each person pays the same percentage of their own income,
+so whoever earns more pays a larger share of the bills. There is **no
+backend** — all state lives in the browser's `localStorage`.
+
+The design is deliberately **minimal and monochrome**: near-black `#111111`,
+grays (`#6B7280`, `#9CA3AF`, `#E5E7EB`), white cards on `#F7F7F7`. No accent
+colors, no gradients, no emojis, no glass/blur effects. Icons are Lucide.
+Keep it that way — the owner explicitly rejected colorful/playful styling.
 
 ## Commands
 
@@ -15,7 +21,7 @@ shows one month at a time.
 npm run dev      # Vite dev server at http://localhost:5173
 npm run build    # tsc -b (strict type-check) then vite build → dist/
 npm run preview  # serve the production build
-npm run lint     # ESLint
+npm run lint     # ESLint (flat config, typescript-eslint + react-hooks)
 ```
 
 There is no test runner configured. `npm run build` is the primary correctness
@@ -23,55 +29,63 @@ gate — TypeScript runs in **strict** mode with `noUnusedLocals` and
 `noUnusedParameters`, so unused imports/vars fail the build. Always run
 `npm run build` before committing.
 
+## Deployment
+
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and
+publishes to GitHub Pages. Feature-branch pushes do **not** deploy — merge to
+`main` when the user wants to see changes live.
+
 ## Architecture
 
 Data flows one way from a single hook down through presentational components:
 
-- **`src/hooks/useTransactions.ts`** is the single source of truth. It owns the
-  `transactions` and `settings` state, persists every mutation to
-  `localStorage`, seeds sample data on first run, and returns transactions
-  pre-sorted newest-first. `App.tsx` calls this once; everything else receives
-  data via props. If you add a new field to the data model, thread it through
-  here first.
+- **`src/hooks/useSplitter.ts`** is the single source of truth. It owns
+  `expenses` and `settings`, persists every mutation to `localStorage`, and
+  seeds sample expenses on first run. Mutations: `addExpense`,
+  `updateExpense`, `removeExpense`, `updateSettings`. `App.tsx` calls this
+  once; everything else receives data via props.
 
-- **`src/lib/`** holds all non-React logic, kept pure and unit-testable:
-  - `storage.ts` — `localStorage` read/write under `spendo.*` keys, plus
-    `DEFAULT_SETTINGS`. All access is wrapped in try/catch and fails silently.
-  - `stats.ts` — derived data: `computeMonthStats` (totals, per-category
-    breakdown with shares, cumulative curve), `computeTrend` (last N months),
-    and the `transactionsForMonth` filter. This is where spending math lives.
-  - `categories.ts` — the fixed `CATEGORIES` catalogue. Each category carries a
-    two-stop gradient (`from`/`to`) that is the **single colour source** for the
-    donut, category bars, transaction icons, and the add-expense picker.
-  - `format.ts` — money (`Intl.NumberFormat`) and month/date helpers. Months are
-    keyed as `YYYY-MM` strings everywhere; use `monthKey`/`shiftMonth` rather
-    than juggling `Date` objects.
+- **`src/lib/`** holds all non-React logic, kept pure:
+  - `splitter.ts` — `computeSplit(expenses, settings)` returns the
+    `SplitResult` (total, each person's ratio/share/percent-of-income).
+    Falls back to 50:50 with `hasIncome: false` when either income is 0.
+    This is the core domain logic.
+  - `storage.ts` — `localStorage` read/write under `spendo.expenses.v1` /
+    `spendo.splitter.v1`, plus `DEFAULT_SETTINGS`. All access is wrapped in
+    try/catch and fails silently.
+  - `categories.ts` — fixed `CATEGORIES` catalogue plus
+    `getCategoryIcon(id)` mapping category ids to Lucide icon components.
+  - `format.ts` — `formatMoney` (Intl) and `currencySymbol` (cached).
+    Never hand-format money.
 
-- **`src/components/`** are presentational and stateless except for local UI
-  state (open/closed sheets, hover). `App.tsx` computes all derived values with
-  `useMemo` and passes them down.
+- **`src/components/`** are presentational; the only state they own is local
+  form/UI state:
+  - `SplitSummaryCard` — hero card: total, thin split bar, one row per person.
+  - `ExpenseList` — rows are clickable (opens edit); trash button deletes
+    (stops propagation).
+  - `AddExpenseSheet` — handles **both add and edit**: the optional `expense`
+    prop switches mode, pre-fills the form, and changes title/button labels.
+  - `PeopleSheet` — settings: currency picker, names, incomes.
+  - `Sheet` — modal shell (bottom sheet on mobile, centered on desktop,
+    Escape/backdrop closes).
+  - `GlassCard` — plain white card (the name is historical; there's no glass
+    effect anymore). Uses `.card` / `.card-strong` from `index.css`.
 
 ### Conventions
 
-- **Months are `YYYY-MM` strings.** Filtering, navigation, and the trend chart
-  all rely on string comparison of these keys. Don't introduce `Date`-based
-  month logic in components.
-- **Amounts** are positive numbers in major currency units (e.g. `12.50`).
-  Currency formatting is centralized in `format.ts` — never hand-format money.
-- **Charts are hand-rolled SVG** (`CategoryDonut`, `BudgetRing`, `TrendChart`) —
-  there is no charting library. Match this approach for new visualizations.
-- **The glass look** comes from the `.glass` / `.glass-strong` / `.glass-sheen`
-  component classes in `src/index.css` (backdrop-blur + translucency) layered
-  over the animated `Background`. Reuse `GlassCard` for new surfaces rather than
-  re-deriving the blur/border/shadow stack.
-- **Category colors**: pull gradients from `getCategory(id)`; never hardcode a
-  hex for a category-related element.
-- Tailwind is the styling system; prefer utility classes. Custom design tokens
-  (radii, animations, fonts) live in `tailwind.config.js`.
+- **Amounts** are positive numbers in major currency units (e.g. `12.50`),
+  rounded to cents on input (`Math.round(x * 100) / 100`).
+- **The two people** are `settings.personA` / `personB` (`{ name, income }`).
+  Person A is rendered as the primary (black) row, B as secondary (gray).
+- **Styling**: Tailwind utilities with hardcoded hex values from the palette
+  above. Shared surface/interaction classes (`.card`, `.card-strong`,
+  `.pressable`, `.tabular`) live in `src/index.css`.
+- **List/expensive components** are wrapped in `React.memo`; callbacks passed
+  from `App.tsx` are wrapped in `useCallback` to keep memoization effective.
 
 ### First-run / data reset
 
-On first load with no stored data, `useTransactions` seeds demo transactions
-from `src/lib/sample.ts` and sets a `spendo.seeded.v1` flag so an
-intentionally-emptied app stays empty. To reset during development, clear the
-`spendo.*` keys from `localStorage`.
+On first load with no stored data, `useSplitter` seeds demo expenses from
+`src/lib/sample.ts` and sets a `spendo.seeded.v2` flag so an intentionally
+emptied app stays empty. To reset during development, clear the `spendo.*`
+keys from `localStorage`.

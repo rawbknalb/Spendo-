@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { Expense, SplitterSettings } from '../types'
 import {
-  DEFAULT_SETTINGS,
   hasSeeded,
   loadExpenses,
   loadSettings,
@@ -21,22 +20,21 @@ function makeId(): string {
   return `exp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 }
 
-export function useSplitter() {
-  const [expenses, setExpenses] = useState<Expense[]>([])
-  const [settings, setSettings] = useState<SplitterSettings>(DEFAULT_SETTINGS)
+/** Hydrate synchronously so the first render already has real data. */
+function initialExpenses(): Expense[] {
+  const stored = loadExpenses()
+  if (stored.length === 0 && !hasSeeded()) {
+    const seed = createSampleExpenses()
+    saveExpenses(seed)
+    markSeeded()
+    return seed
+  }
+  return stored
+}
 
-  useEffect(() => {
-    const stored = loadExpenses()
-    if (stored.length === 0 && !hasSeeded()) {
-      const seed = createSampleExpenses()
-      setExpenses(seed)
-      saveExpenses(seed)
-      markSeeded()
-    } else {
-      setExpenses(stored)
-    }
-    setSettings(loadSettings())
-  }, [])
+export function useSplitter() {
+  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses)
+  const [settings, setSettings] = useState<SplitterSettings>(loadSettings)
 
   const addExpense = useCallback((input: NewExpense) => {
     setExpenses((prev) => {

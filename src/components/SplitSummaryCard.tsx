@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { AlertCircle } from 'lucide-react'
 import type { SplitterSettings } from '../types'
 import type { SplitResult } from '../lib/splitter'
@@ -9,7 +10,7 @@ interface SplitSummaryCardProps {
   settings: SplitterSettings
 }
 
-export function SplitSummaryCard({ split, settings }: SplitSummaryCardProps) {
+export const SplitSummaryCard = memo(function SplitSummaryCard({ split, settings }: SplitSummaryCardProps) {
   const { currency, personA, personB } = settings
   const { total, shareA, shareB, ratioA, ratioB, pctOfIncomeA, hasIncome } = split
 
@@ -64,7 +65,7 @@ export function SplitSummaryCard({ split, settings }: SplitSummaryCardProps) {
       )}
     </GlassCard>
   )
-}
+})
 
 interface PersonRowProps {
   name: string
